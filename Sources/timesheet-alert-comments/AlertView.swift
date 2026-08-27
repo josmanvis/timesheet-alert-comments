@@ -99,15 +99,28 @@ struct AlertView: View {
                         .padding(.vertical, 8)
                         .allowsHitTesting(false)
                 }
-                TextEditor(text: $commentText)
-                    .scrollContentBackground(.hidden)
-                    .background(Color.black.opacity(0.2))
-                    .foregroundColor(.white)
-                    .cornerRadius(6)
-                    .frame(height: 80)
-                    .onChange(of: commentText) { newValue in
-                        AlertWindowController.shared?.isUserTyping = !newValue.isEmpty
+                Group {
+                    if #available(macOS 13.0, *) {
+                        TextEditor(text: $commentText)
+                            .scrollContentBackground(.hidden)
+                            .background(Color.black.opacity(0.2))
+                            .foregroundColor(.white)
+                            .cornerRadius(6)
+                            .frame(height: 80)
+                            .onChange(of: commentText) { newValue in
+                                AlertWindowController.shared?.isUserTyping = !newValue.isEmpty
+                            }
+                    } else {
+                        TextEditor(text: $commentText)
+                            .background(Color.black.opacity(0.2))
+                            .foregroundColor(.white)
+                            .cornerRadius(6)
+                            .frame(height: 80)
+                            .onChange(of: commentText) { newValue in
+                                AlertWindowController.shared?.isUserTyping = !newValue.isEmpty
+                            }
                     }
+                }
             }
 
             HStack {

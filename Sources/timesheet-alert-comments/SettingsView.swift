@@ -5,31 +5,66 @@ struct SettingsView: View {
     @State private var selectedTab: String? = "General"
 
     var body: some View {
-        NavigationSplitView {
-            List(selection: $selectedTab) {
-                Label("General", systemImage: "clock").tag("General")
-                Label("Presets", systemImage: "tag").tag("Presets")
-                Label("Storage", systemImage: "folder").tag("Storage")
-                Label("Skills", systemImage: "brain").tag("Skills")
-                Label("History", systemImage: "clock.arrow.circlepath").tag("History")
-                Label("Timesheet", systemImage: "calendar").tag("Timesheet")
-                Label("Appearance", systemImage: "paintbrush").tag("Appearance")
-            }
-            .navigationSplitViewColumnWidth(min: 150, ideal: 160, max: 220)
-        } detail: {
-            Group {
-                switch selectedTab {
-                case "General": GeneralTab().navigationTitle("General")
-                case "Presets": PresetsTab().navigationTitle("Presets")
-                case "Storage": StorageTab().navigationTitle("Storage")
-                case "Skills": SkillsTab().navigationTitle("Skills")
-                case "History": HistoryTab().navigationTitle("History")
-                case "Timesheet": TimesheetTab().navigationTitle("Timesheet")
-                case "Appearance": AppearanceTab().navigationTitle("Appearance")
-                default: Text("Select an item").foregroundColor(.secondary)
+        Group {
+            if #available(macOS 13.0, *) {
+                NavigationSplitView {
+                    List(selection: $selectedTab) {
+                        Label("General", systemImage: "clock").tag("General")
+                        Label("Presets", systemImage: "tag").tag("Presets")
+                        Label("Storage", systemImage: "folder").tag("Storage")
+                        Label("Skills", systemImage: "brain").tag("Skills")
+                        Label("History", systemImage: "clock.arrow.circlepath").tag("History")
+                        Label("Timesheet", systemImage: "calendar").tag("Timesheet")
+                        Label("Appearance", systemImage: "paintbrush").tag("Appearance")
+                    }
+                    .navigationSplitViewColumnWidth(min: 150, ideal: 160, max: 220)
+                } detail: {
+                    detailView()
+                }
+            } else {
+                NavigationView {
+                    List(selection: $selectedTab) {
+                        Label("General", systemImage: "clock").tag("General")
+                        Label("Presets", systemImage: "tag").tag("Presets")
+                        Label("Storage", systemImage: "folder").tag("Storage")
+                        Label("Skills", systemImage: "brain").tag("Skills")
+                        Label("History", systemImage: "clock.arrow.circlepath").tag("History")
+                        Label("Timesheet", systemImage: "calendar").tag("Timesheet")
+                        Label("Appearance", systemImage: "paintbrush").tag("Appearance")
+                    }
+                    .frame(minWidth: 150, idealWidth: 160, maxWidth: 220)
+                    
+                    detailView()
                 }
             }
-            .frame(minWidth: 550, minHeight: 450)
+        }
+    }
+    
+    @ViewBuilder
+    private func detailView() -> some View {
+        Group {
+            switch selectedTab {
+            case "General": GeneralTab().navigationTitle("General")
+            case "Presets": PresetsTab().navigationTitle("Presets")
+            case "Storage": StorageTab().navigationTitle("Storage")
+            case "Skills": SkillsTab().navigationTitle("Skills")
+            case "History": HistoryTab().navigationTitle("History")
+            case "Timesheet": TimesheetTab().navigationTitle("Timesheet")
+            case "Appearance": AppearanceTab().navigationTitle("Appearance")
+            default: Text("Select an item").foregroundColor(.secondary)
+            }
+        }
+        .frame(minWidth: 550, minHeight: 450)
+    }
+}
+
+extension View {
+    @ViewBuilder
+    func compatFormStyle() -> some View {
+        if #available(macOS 13.0, *) {
+            self.formStyle(.grouped)
+        } else {
+            self
         }
     }
 }
@@ -93,7 +128,7 @@ struct GeneralTab: View {
             }
             .padding(.bottom, 4)
         }
-        .formStyle(.grouped)
+        .compatFormStyle()
         .padding(.horizontal)
     }
 
@@ -289,7 +324,7 @@ struct StorageTab: View {
                     .foregroundColor(.secondary)
             }
         }
-        .formStyle(.grouped)
+        .compatFormStyle()
         .padding(.horizontal)
         .onAppear {
             refresh()
@@ -393,7 +428,7 @@ struct AppearanceTab: View {
                 }
             }
         }
-        .formStyle(.grouped)
+        .compatFormStyle()
         .padding(.horizontal)
     }
 }

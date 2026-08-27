@@ -69,6 +69,7 @@ class TimesheetGenerator: ObservableObject {
             // 1. Fetch Calendar Events
             let semaphore = DispatchSemaphore(value: 0)
             var hasAccess = false
+            #if compiler(>=5.9)
             if #available(macOS 14.0, *) {
                 self.eventStore.requestFullAccessToEvents { granted, _ in
                     hasAccess = granted
@@ -80,6 +81,12 @@ class TimesheetGenerator: ObservableObject {
                     semaphore.signal()
                 }
             }
+            #else
+            self.eventStore.requestAccess(to: .event) { granted, _ in
+                hasAccess = granted
+                semaphore.signal()
+            }
+            #endif
             semaphore.wait()
             
             if hasAccess {
