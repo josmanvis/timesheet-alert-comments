@@ -1,5 +1,5 @@
 cask "timesheet-alert-comments" do
-  version "1.0.0"
+  version "1.0.1"
   sha256 :no_check
 
   url "https://github.com/josmanvis/timesheet-alert-comments/releases/latest/download/TimesheetAlertComments.dmg"
