@@ -112,7 +112,7 @@ struct AlertView: View {
 
             HStack {
                 Button("Open Replicon") {
-                    if let url = URL(string: "https://na4.replicon.com/CventG3/my/timesheet/earliest-not-submitted") {
+                    if let url = URL(string: "https://www.replicon.com/") {
                         NSWorkspace.shared.open(url)
                     }
                 }

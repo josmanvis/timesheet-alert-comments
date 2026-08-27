@@ -10,7 +10,7 @@ class SkillInstaller: ObservableObject {
     @Published var errorMessage: String? = nil
     @Published var successMessage: String? = nil
     
-    private let repoURL = "https://gitlab.com/on24/videoservices/conf_client_opentok_react.git"
+    private let repoURL = "https://gitlab.com/your-org/your-repo.git"
     private let branch = "admin-skills"
     
     private var tempCloneURL: URL? {
